@@ -229,42 +229,5 @@ pre-computed for demo timing" is a fine thing to admit.
 
 ---
 
-## The three questions you will get
 
-**"Is the designer actually an agent or just a script?"**
-Open the tool-call trace in the UI, or any round's `trace` in
-`run_log.json`. The model chooses which molecules to propose, which to spend
-its docking budget on, and when to stop. We wrote the tools and the budget,
-not the decisions. Note it spent 3 of 4 docks and stopped on its own.
 
-**"How do you know the critic is right?"**
-`eval_set.py`: two tiers, 34 molecules, every miss named. And the operating
-point table — the flag boundary is a dial you choose, and at `strict` there
-are zero false passes.
-
-**"What does scale-up assessment add over an SA score?"**
-Chem eng answers this, not you. SA score is one of eight criteria.
-It cannot tell you that a molecule needs a chiral resolution, that a
-21-membered macrocycle needs a dedicated macrocyclisation, or that a
-dithioester will not survive isolation. Point at the round-1 cards: the
-rejections name `stereocentres`, `estimated_steps` and `heavy_atoms`
-individually, and those names are what the designer acts on. An SA score of
-4.26 tells the designer nothing it can fix.
-
----
-
-## Known limitations — say these before a judge does
-
-- `estimated_steps` is a heuristic from ring count, stereocentres and heavy
-  atoms, not a retrosynthesis. It is labelled an estimate everywhere.
-- **We do not cost molecules.** Pricing a route depends on the actual route,
-  the scale and supplier quotes — it is the process chemist's call, not
-  something to infer from a SMILES string. The tool reports how demanding a
-  synthesis looks (`straightforward` / `moderate` / `demanding` /
-  `specialist`) and stops there.
-- Building-block availability is approximated by element and halogen-density
-  checks, not a supplier-catalogue lookup. That is the obvious next step.
-- Docking is rigid-receptor Vina on a single grid; scores rank, they do not
-  predict affinity.
-- The critics are deterministic rules, not an LLM. That is a deliberate
-  choice — it makes them reproducible and auditable on a slide.
